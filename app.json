@@ -6,6 +6,9 @@
   "website": "https://github.com/retropubg/Test-Chemcker-Bot",
   "repository": "https://github.com/retropubg/Test-Chemcker-Bot",
 
+  "scripts": {
+  "start": "node app.js"
+  }
   
   "addons": [ ],
   "buildpacks": [ {"url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"},
