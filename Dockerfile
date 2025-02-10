@@ -1,7 +1,7 @@
 FROM php:8.0-cli
 
 # Define el directorio de trabajo
-WORKDIR /app
+WORKDIR /app/Core
 
 # Instalar dependencias necesarias, como pgsql y zip
 RUN apt-get update && apt-get install -y libzip-dev libpq-dev unzip \
