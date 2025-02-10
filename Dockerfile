@@ -20,5 +20,5 @@ RUN if [ -f composer.json ]; then composer install; fi
 EXPOSE 10000
 
 # Comando para ejecutar el servidor embebido de PHP
-CMD ["php", "includeall.php"]
+CMD ["php", "core.php"]
 
