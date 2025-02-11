@@ -1,53 +1,47 @@
 <?php
 
-$botToken =  "8048311747:AAGyGx8dCxU3zsDsct5Hd6T6Ign5G6gVq6Y";
-$website = "https://api.telegram.org/bot".$botToken;
-$update = file_get_contents('php://input');
-$update = json_decode($update, TRUE);
+$botToken = "8048311747:AAGyGx8dCxU3zsDsct5Hd6T6Ign5G6gVq6Y";
+$website = "https://api.telegram.org/bot" . $botToken;
 
-// Log the incoming update for debugging
+// Obtener la actualización de Telegram
+$update = file_get_contents('php://input');
+
+// Verificar si la entrada es válida
+if (!$update) {
+    error_log("Error: No se recibió ninguna actualización.");
+    exit;
+}
+
+$update = json_decode($update, true);
+
+// Registrar la actualización para depuración
 error_log(print_r($update, true));
 
 if ($update !== null) {
+    // Manejo de callback queries
     if (isset($update["callback_query"])) {
         $cchatid2 = $update["callback_query"]["message"]["chat"]["id"] ?? 'Unknown';
         $cmessage_id2 = $update["callback_query"]["message"]["message_id"] ?? 'Unknown';
         $cdata2 = $update["callback_query"]["data"] ?? 'Unknown';
     }
     
+    // Manejo de mensajes
     if (isset($update["message"])) {
-        $username = $update["message"]["from"]["username"] ?? 'Unknown';
-        $chatId = $update["message"]["chat"]["id"] ?? 'Unknown';
-        $chatusername = $update["message"]["chat"]["username"] ?? 'Unknown';
-        $chatname = $update["message"]["chat"]["title"] ?? 'Unknown';
-        $gId = $update["message"]["from"]["id"] ?? 'Unknown';
-        $userId = $update["message"]["from"]["id"] ?? 'Unknown';
-        $firstname = $update["message"]["from"]["first_name"] ?? 'Unknown';
-        $message = $update["message"]["text"] ?? 'Unknown';
-        $new_chat_member = $update["message"]["new_chat_member"] ?? null;
-        
-        if ($new_chat_member) {
-            $newusername = $new_chat_member["username"] ?? 'Unknown';
-            $newgId = $new_chat_member["id"] ?? 'Unknown';
-            $newfirstname = $new_chat_member["first_name"] ?? 'Unknown';
-        }
+        $chatId = $update["message"]["chat"]["id"] ?? null;
+        $firstname = $update["message"]["from"]["first_name"] ?? 'Usuario';
+        $message = $update["message"]["text"] ?? '';
 
-        $message_id = $update["message"]["message_id"] ?? 'Unknown';
-        $r_id = $update["message"]["reply_to_message"] ?? null;
-        
-        if ($r_id) {
-            $r_userId = $r_id["from"]["id"] ?? 'Unknown';
-            $r_firstname = $r_id["from"]["first_name"] ?? 'Unknown';
-            $r_username = $r_id["from"]["username"] ?? 'Unknown';
-            $r_msg_id = $r_id["message_id"] ?? 'Unknown';
-            $r_msg = $r_id["text"] ?? 'Unknown';
+        // Verifica si el mensaje es válido antes de responder
+        if ($chatId && !empty($message)) {
+            $responseText = "Hola, $firstname! Recibí tu mensaje: \"$message\"";
+
+            // Enviar respuesta al usuario
+            $sendMessageUrl = "$website/sendMessage?chat_id=$chatId&text=" . urlencode($responseText);
+            file_get_contents($sendMessageUrl);
         }
-        
-        $sender_chat = $update["message"]["sender_chat"]["type"] ?? 'Unknown';
     }
 } else {
-    error_log('Invalid JSON input');
-    exit;
+    error_log("Error: La actualización de Telegram es nula.");
 }
 
 ?>
