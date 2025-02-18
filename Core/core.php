@@ -1,6 +1,6 @@
 <?php
 
-$botToken = "8048311747:AAGyGx8dCxU3zsDsct5Hd6T6Ign5G6gVq6Y";
+$botToken = "7633669044:AAHiS9PWSZkyZeHdTA6m8-6PYNf9DKitfvQ";
 $website = "https://api.telegram.org/bot" . $botToken;
 
 // Obtener la actualización de Telegram
